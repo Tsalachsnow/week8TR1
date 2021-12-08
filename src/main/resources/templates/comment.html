@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Facebook Clone</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap 4.5 CSS-->
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap JS Requirements -->
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"
+    ></script>
+    <script th:src="@{//localhost:9002/comment.js}"></script>
+</head>
+<body>
+    <nav style="background: #3b5998" class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" style="color:#fff;"><h1>Facebook</h1></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" style="color: #fff;" th:href="@{/home}"><h3>Home</h3></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section style="margin: 60px auto; width: 50%; border: 2px solid #3b5998; padding: 15px">
+        <span th:with="comments = ${commentData}">
+            <div th:if="${comments.get(0).getImageName() != '/image/'}">
+                <img th:src="@{${comments.get(0).getImageName()}}" width="100%" height="60%"/>
+            </div>
+            <div th:if="${comments.get(0).getImageName() == '/image/'}">
+                <img style="display: none;" th:src="@{${comments.get(0).getImageName()}}" width="100%" height="60%"/>
+            </div>
+            <h3 style="margin-top: 5px;">Post Title: <span th:text="${comments.get(0).getTitle()}"></span> </h3>
+
+            <div th:each="data:${comments}">
+                <div th:if="${comments.size()} != 0">
+                    <h6>Name:
+                    <span th:text="${data.getUsername()}"></span></h6>
+                    <div th:text="${data.getComment()}"></div>
+
+                    <div th:if="${data.getUserId() == user.getId()}">
+                        <p><em>Edit Comment</em></p>
+                         <textarea class="edit-comment" placeholder="Edit comment here...">
+                         </textarea>
+                    </div>
+
+                    <button th:onclick="'del('+${data.postId}+', '+${data.getUserId()}+','+${data.getId()}+')'" class="btn btn-primary btn-md mt-3 btn-block"
+                            th:if="${data.getUserId() == user.getId()}"
+                    >DELETE</button>
+                    <button th:onclick="'edit('+${data.postId}+','+${data.getUserId()}+','+${data.getId()}+')'" class="btn btn-primary btn-md mt-3 btn-block"
+                            th:if="${data.getUserId() == user.getId()}"
+                    >EDIT</button>
+                </div>
+                <hr/>
+            </div>
+        </span>
+    </span>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</body>
+</html>

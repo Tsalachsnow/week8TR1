@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Facebook Clone</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap 4.5 CSS-->
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap JS Requirements -->
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"
+    ></script>
+    <!-- My css -->
+    <link rel="stylesheet" th:href="@{home.css}"/>
+</head>
+<body>
+<span th:with="mess=${session.message}">
+        <div th:if="${mess} != null">
+            <div class="alert alert-success" role="alert">
+                <div th:text="${mess}"></div>
+            </div>
+        </div>
+    </span>
+<nav class="navbar navbar-expand-lg navbar-success bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#" style="font-size: larger">Facebook</a>
+        <form class="d-flex">
+            <input
+                    class="me-2 searchbar"
+                    type="search"
+                    placeholder="Search Facebook...."
+                    aria-label="Search"
+            />
+        </form>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"
+                    ><img src="./image/marketplace.png" class="pictures alt="
+                    /></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"
+                    ><img src="./image/group.png" class="pictures alt="
+                    /></a>
+                </li>
+                <li class="nav-item"></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                    ><img src="./image/friends.png" class="pictures alt="
+                    /></a>
+                </li>
+                <li class="nav-item" style="vertical-align: center">
+                    <p th:text="${user.getLastname()}"></p>
+                </li>
+                <li class="nav-item" style="margin-left: 20px; vertical-align: center">
+                    <p style="color: #fff; font-weight: bold"><a th:href="@{/processLogout}">Log-out</a></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="fix">
+                <div>
+                    <img src="./image/fb.jpeg" href="image/fb.jpeg" class="pix" alt="" />
+                    <p class="yourfeed"><div th:text="${user.getFirstname()+' '+user.getLastname() }"></div></p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/love.png " class="pictures" alt="" />
+                    <p class="yourfeed">Covid-19 Information Centre</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/friends.png" class="pictures alt=" />
+                    <p class="yourfeed">Friends</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/group.png" class="pictures alt=" />
+                    <p class="yourfeed">Groups</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/marketplace.png" class="pictures alt=" />
+                    <p class="yourfeed">Marketplace</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/watch.png" class="pictures alt=" />
+                    <p class="yourfeed">Watch</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/Events.png" class="pictures alt=" />
+                    <p class="yourfeed">Event</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/marketplace.png" class="pictures alt=" />
+                    <p class="yourfeed">Memory</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/Saved.png " class="pictures alt=" />
+                    <p class="yourfeed">save</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/Pages.png " class="pictures alt=" />
+                    <p class="yourfeed">Pages</p>
+                </div>
+                <div class="yourfeed1">
+                    <img src="./image/semore.png" class="pictures alt=" />
+                    <p class="yourfeed">See more</p>
+                </div>
+                <p class="text">Your Shortcuts</p>
+                <img src="" alt="" />
+                <p>
+                    <small
+                    >Privacy · Terms · Advertising · Ad Choices · Cookies · ·
+                        Facebook © 2021</small
+                    >
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="scroller like-icon" style="height:  700px">
+                    <span th:each="post : ${posts}">
+                        <div class="linear" style="background-color: #3d3d3d; border-radius:30px;">
+                            <div class="linear" style="background-color: #3d3d3d; border-radius:30px;">
+                                <div class="titleText">
+                                    <h2 style="color: #fff; padding: 10px; background-color: #0039a6"><p th:text="${post.getTitle()}"></p></h2>
+                                    <p style="color: #ffffff; padding: 10px;">
+<!--                                        <span style="font-weight: bold; font-size: 1.1em;">Author:</span>-->
+                                        <span style="color:#000;" th:text="${post.getName()}"></span></p>
+                                    <div  th:if="${post.getImageName() != '/image/'}">
+                                    <img th:src="@{${post.getImageName()}}" class="majorpix" alt="" />
+                                    </div>
+                                    <div th:if="${post.getImageName() == '/image/'}">
+                                        <img style="  display: none;" th:src="@{${post.getImageName()}}" class="majorpix" alt="" /></div>
+                                </div>
+                            </div>
+                            <div style="color:#ffffff; margin-left: 20px; margin-right: 20px; margin-top: 0px" class="body">
+                                <div th:text="${post.getBody()}"></div><br/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="comment_like_share mb-2">
+                            <div class="like">
+                                <i th:onclick="'like('+${post.getId()}+', '+${user.getId()}+')'" th:id="${post.getId()}"
+                                   style="color: #ffffff" class="fa fa-thumbs-o-up" aria-hidden="true">
+                                    <span class="likes" th:text="${post.getNoLikes()}"></span>
+                                    <span style="display:none;" class="thumb" th:text="${post.getId()}"></span></i>
+                                <p style="display: none" class="userLiked" th:text="${post.isLikedPost()}"></p>
+                            </div>
+                            <div class="comment">
+
+                                <i class="fa fa-commenting-o" aria-hidden="true" th:onclick="'com('+${post.getId()}+', '+${post.getNoComments()}+')'">
+                                    <span th:text="${post.getNoComments()}"></span>
+                                </i>
+                            </div>
+                            <div class="edit">
+                                <i class="fa fa-edit" aria-hidden="true" th:onclick="'edit('+${post.getId()}+')'">
+                                </i>
+                            </div>
+                            <div class="delete">
+                                <i class="fa fa-remove" aria-hidden="true" id="delete" th:onclick="'del('+${post.getId()}+')'">
+                                </i>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 50px; width: 100%">
+                            <form th:action="@{/processComment}" th:object="${commentData}" method="POST">
+                                <input style="display:none" type="text" name="postId" th:value="${post.getId()}"/>
+                                <textarea style="width: 590px"
+                                          name="comment"
+                                          th:field="*{comment}"
+                                          class="form-control drag"
+                                          placeholder="What's on your mind?"
+                                          required
+                                ></textarea>
+                                <button type="summit" class="btn btn-primary btn-md mt-3 btn-block">
+                                    Comment
+                                </button><br/>
+                            </form>
+                        </div>
+                    </span>
+            </div>
+        </div>
+        <div class="col-lg-3 third">
+            <div class="postArea">
+                <form th:action="@{/postProcessing}" th:object="${post}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="post-title" class="form-label">Title</label>
+                        <input
+                                type="text"
+                                name="title"
+                                th:field="*{title}"
+                                class="form-control"
+                                id="post-title"
+                                placeholder="Post Title"
+                                required
+                        />
+                    </div>
+                    <div class="mb-2">
+                        <textarea
+                                style="border-radius: 30px"
+                                name="body"
+                                th:field="*{body}"
+                                id="post"
+                                cols="30"
+                                rows="2"
+                                class="form-control"
+                                aria-describedby="emailHelp"
+                                placeholder="Whats on your mind"
+                                required
+                        ></textarea>
+                    </div>
+                    <div class="row post-buttons mb-4">
+                        <div class="col-md-6 col-btn">
+                            <label class="form-label" for="customFile">Photo</label>
+                            <input type="file" name="file" class="form-control" id="customFile"/>
+                        </div>
+                        <div class="col-md-6 col-btn">
+                            <p></p>
+                            <button type="submit" class="btn btn-primary btn-md mt-3 btn-block">
+                                Post
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer></footer>
+<script
+        src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"
+></script>
+<script src="https://use.fontawesome.com/aed9ef824b.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script th:src="@{home.js}"></script>
+</body>
+</html>
