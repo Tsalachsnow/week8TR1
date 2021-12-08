@@ -2,6 +2,8 @@ package week7TR3.model;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import week7TR3.annotations.ValidEmail;
+
 import javax.persistence.*;
 import java.util.List;
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -31,7 +33,7 @@ public class Person {
 
     @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(45)")
     private String password;
-
+    @ValidEmail
     @Column(name = "email", nullable = false, columnDefinition = "VARCHAR(45)")
     private String email;
 

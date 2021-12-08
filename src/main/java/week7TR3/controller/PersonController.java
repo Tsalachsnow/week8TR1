@@ -1,6 +1,8 @@
 package week7TR3.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +16,7 @@ import week7TR3.service.serviceImplementation.PostServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -24,6 +27,7 @@ public class PersonController {
 
     @Autowired
     private PostServiceImpl postService;
+
 
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -37,6 +41,12 @@ public class PersonController {
         mav.addObject("login", new Login());
 
         return mav;
+    }
+
+
+    @PostMapping("/validate")
+    public ResponseEntity<String> validateObject(@RequestBody @Valid Person person) {
+        return new ResponseEntity("User validated successfully", HttpStatus.OK);
     }
 
 
