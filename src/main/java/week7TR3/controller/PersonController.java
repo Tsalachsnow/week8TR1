@@ -22,12 +22,14 @@ import java.util.List;
 @Controller
 public class PersonController {
 
-    @Autowired
-    private PersonServiceImpl userService;
+    private final PersonServiceImpl userService;
 
-    @Autowired
-    private PostServiceImpl postService;
+    private final PostServiceImpl postService;
 
+    public PersonController(PersonServiceImpl userService, PostServiceImpl postService) {
+        this.userService = userService;
+        this.postService = postService;
+    }
 
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

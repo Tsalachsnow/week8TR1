@@ -14,54 +14,43 @@ import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private PostRepository postRepository;
+    public CommentServiceImpl(PostRepository postRepository, CommentRepository commentRepository) {
+        this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
+    }
 
 
     public boolean createComment(Long userId, Long postId,Comment comment){
         boolean result = false;
-
-        try{
-            Post post = postRepository.findById(postId).get();
-            //set the post
+        Post post = postRepository.findById(postId).get();
+        if(post != null){
             comment.setPost(post);
 
             commentRepository.save(comment);
             result = true;
-
-        }catch (Exception e){
-            e.printStackTrace();
         }
-
         return result;
     }
 
 
     public List<CommentMapper> getComments(Long postId){
         List<CommentMapper> comments = new ArrayList();
+        List<Comment> commentsData = commentRepository.findAllByPostPostId(postId);
 
-        try{
+        for (Comment commentEach:commentsData) {
+            CommentMapper comment = new CommentMapper();
+            comment.setId(commentEach.getId());
+            comment.setPostId(commentEach.getPost().getPostId());
+            comment.setComment(commentEach.getComment());
+            comment.setUsername(commentEach.getPerson().getLastname()+" "+commentEach.getPerson().getFirstname());
+            comment.setTitle(commentEach.getPost().getTitle());
+            comment.setImageName("/image/"+commentEach.getPost().getImageName());
+            comment.setUserId(commentEach.getPerson().getId());
 
-            List<Comment> commentsData = commentRepository.findAllByPostPostId(postId);
-
-            for (Comment commentEach:commentsData) {
-                CommentMapper comment = new CommentMapper();
-                comment.setId(commentEach.getId());
-                comment.setPostId(commentEach.getPost().getPostId());
-                comment.setComment(commentEach.getComment());
-                comment.setUsername(commentEach.getPerson().getLastname()+" "+commentEach.getPerson().getFirstname());
-                comment.setTitle(commentEach.getPost().getTitle());
-                comment.setImageName("/image/"+commentEach.getPost().getImageName());
-                comment.setUserId(commentEach.getPerson().getId());
-
-                comments.add(comment);
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
+            comments.add(comment);
         }
 
         return comments;
@@ -70,21 +59,17 @@ public class CommentServiceImpl implements CommentService {
 
     public boolean editComment(Long commentId, Person person, Long postId, String comment) {
         boolean status = false;
+        Post post = postRepository.findById(postId).get();
 
-        try {
-            Post post = postRepository.findById(postId).get();
+        Comment data = commentRepository.findCommentById(commentId);
 
-            Comment data = commentRepository.findCommentById(commentId);
-
+        if(post != null && data != null) {
             data.setComment(comment);
             data.setPerson(person);
             data.setPost(post);
             commentRepository.save(data);
 
             status = true;
-
-        }catch (Exception e) {
-            e.printStackTrace();
         }
 
         return status;
@@ -94,11 +79,9 @@ public class CommentServiceImpl implements CommentService {
     public boolean deleteComment(Long commentId){
         boolean status =  false;
 
-        try {
+        if(commentRepository.existsById(commentId)) {
             commentRepository.deleteCommentById(commentId);
             status = true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return status;
     }

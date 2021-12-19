@@ -18,50 +18,41 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
 
-    @Autowired
-    PostRepository postRepository;
-    @Autowired
-    LikesRepository likesRepository;
-    @Autowired
-    CommentRepository commentRepository;
-    @Autowired
-    PersonRepository personRepository;
+    final PostRepository postRepository;
+    final LikesRepository likesRepository;
+    final CommentRepository commentRepository;
+    final PersonRepository personRepository;
 
-    /**
-     * CREATE operation on Post
-     * @param userId
-     * @param post
-     * @return boolean(true for successful creation and false on failure to create)
-     * */
+
+    public PostServiceImpl(PostRepository postRepository, LikesRepository likesRepository, CommentRepository commentRepository, PersonRepository personRepository) {
+        this.postRepository = postRepository;
+        this.likesRepository = likesRepository;
+        this.commentRepository = commentRepository;
+        this.personRepository = personRepository;
+    }
+
+
     public boolean createPost(Long userId, Post post) {
         boolean result = false;
 
-        try {
-            Person user = personRepository.findById(userId).get();
+        Person user = personRepository.findById(userId).get();
 
-            if(user != null){
-                post.setChecker("ACTIVE");
-                postRepository.save(post);
-                result = true;
-            }else result = false;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if(user != null){
+            post.setChecker("ACTIVE");
+            postRepository.save(post);
+            result = true;
+        }else result = false;
 
         return result;
     }
 
 
     public List<Post> getPostById(Long postId){
-        List<Post> postList = new ArrayList<>();
+        List<Post> postList = postRepository.findPostByPostId(postId);
 
-        try{
-            postList= postRepository.findPostByPostId(postId);
-        }catch(Exception e){
-            System.out.println("Something went wrong1 "+e.getMessage());
-        }
-
+      if(postList == null) {
+          System.out.println("Something went wrong1 ");
+      }
         return postList;
     }
 
@@ -69,41 +60,36 @@ public class PostServiceImpl implements PostService {
     public List<PostMapper> getPost(Person currentUser) {
         List<PostMapper> posts = new ArrayList<>();
 
-        try {
-            //get all posts
-            List<Post> postData = postRepository.findAllByCheckerIsOrderByPostIdDesc("ACTIVE");
+        List<Post> postData = postRepository.findAllByCheckerIsOrderByPostIdDesc("ACTIVE");
 
-            for (Post postEach:postData) {
+        for (Post postEach:postData) {
 
-                PostMapper post = new PostMapper();
-                post.setId(postEach.getPostId());
-                post.setTitle(postEach.getTitle());
-                post.setBody(postEach.getBody());
-                post.setImageName("/image/"+postEach.getImageName());
-                post.setName(postEach.getPerson().getLastname()+ " "+ postEach.getPerson().getFirstname());
+            PostMapper post = new PostMapper();
+            post.setId(postEach.getPostId());
+            post.setTitle(postEach.getTitle());
+            post.setBody(postEach.getBody());
+            post.setImageName("/image/"+postEach.getImageName());
+            post.setName(postEach.getPerson().getLastname()+ " "+ postEach.getPerson().getFirstname());
 
-                //the total number of likes on this particular post
-                List<Likes> numberOfLikes = likesRepository.findAllByPostPostId(postEach.getPostId());
-                int likeCount = numberOfLikes.size();
-                post.setNoLikes(likeCount);
+            //the total number of likes on this particular post
+            List<Likes> numberOfLikes = likesRepository.findAllByPostPostId(postEach.getPostId());
+            int likeCount = numberOfLikes.size();
+            post.setNoLikes(likeCount);
 
-                //the total number of comments on this particular post
-                List<Comment> noOfComment = commentRepository.findAllByPostPostId(postEach.getPostId());
-                int commentCount = noOfComment.size();
-                post.setNoComments(commentCount);
+            //the total number of comments on this particular post
+            List<Comment> noOfComment = commentRepository.findAllByPostPostId(postEach.getPostId());
+            int commentCount = noOfComment.size();
+            post.setNoComments(commentCount);
 
-                //return true if current user liked this post, else false
-                List<Likes> postLiked = likesRepository.findAllByPostPostIdAndPersonId(postEach.getPostId(), currentUser.getId());
-                if(postLiked.size() > 0){
-                    post.setLikedPost(true);
-                }
-
-                posts.add(post);
+            //return true if current user liked this post, else false
+            List<Likes> postLiked = likesRepository.findAllByPostPostIdAndPersonId(postEach.getPostId(), currentUser.getId());
+            if(postLiked.size() > 0){
+                post.setLikedPost(true);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            posts.add(post);
         }
+
 
         return posts;
     }
@@ -111,37 +97,26 @@ public class PostServiceImpl implements PostService {
 
     public boolean editPost(Person person, Long postId, String title, String body) {
         boolean status = false;
+        Post post = postRepository.findById(postId).get();
+           if(post != null){
+               post.setTitle(title);
+               post.setBody(body);
+               postRepository.save(post);
 
-        try {
-            Post post = postRepository.findById(postId).get();
-            post.setTitle(title);
-            post.setBody(body);
-            postRepository.save(post);
-
-            status = true;
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
+               status = true;
+           }
         return status;
     }
 
 
     public boolean deletePost(Long postId, Long personId){
         boolean status =  false;
+        Post post = postRepository.findPostByPostIdAndPersonId(postId, personId);
 
-        try {
-
-            Post post = postRepository.findPostByPostIdAndPersonId(postId, personId);
-
-            if(post != null){
-                post.setChecker("INACTIVE");
-                postRepository.save(post);
-                status = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(post != null){
+            post.setChecker("INACTIVE");
+            postRepository.save(post);
+            status = true;
         }
         return status;
     }

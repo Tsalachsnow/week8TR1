@@ -10,49 +10,36 @@ import week7TR3.utils.PasswordHashing;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-    @Autowired
+    private final
     PersonRepository personRepository;
+
+    public PersonServiceImpl(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
 
     public boolean createUser(Person person){
         boolean flag = false;
+        person.setPassword(PasswordHashing.encryptPassword(person.getPassword()));
 
-        try {
-            //password encryption
-            person.setPassword(PasswordHashing.encryptPassword(person.getPassword()));
+        Person userData = personRepository.findPersonByEmail(person.getEmail());
 
-            Person userData = personRepository.findPersonByEmail(person.getEmail());
-
-
-            if(userData == null){
-                System.out.println(person);
-                personRepository.save(person);
-                flag = true;
-            } else flag = false;
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(userData == null){
+            System.out.println(person);
+            personRepository.save(person);
+            flag = true;
         }
-
         return  flag;
     }
 
 
     public Person getUser(String email, String password){
 
-        Person userData = null;
-
-        try {
-
-            userData = personRepository.findPersonByEmail(email);
+        Person userData = personRepository.findPersonByEmail(email);
 
             if(!password.equals(PasswordHashing.decryptPassword(userData.getPassword()))){
                 userData = null;
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         return userData;
     }

@@ -12,18 +12,20 @@ import week7TR3.service.LikeService;
 @Service
 public class LikeServiceImpl implements LikeService {
 
-    @Autowired
-    private LikesRepository likesRepository;
-    @Autowired
-    private PostRepository postRepository;
+    private final LikesRepository likesRepository;
+    private final PostRepository postRepository;
+
+    public LikeServiceImpl(LikesRepository likesRepository, PostRepository postRepository) {
+        this.likesRepository = likesRepository;
+        this.postRepository = postRepository;
+    }
 
 
     public boolean likePost(Person person, Long postId, String action){
         boolean result = false;
 
         Post post = postRepository.findById(postId).get();
-
-        try{
+        if(post != null){
             Likes like = new Likes();
             like.setPerson(person);
             like.setPost(post);
@@ -37,8 +39,6 @@ public class LikeServiceImpl implements LikeService {
             }
 
             result = true;
-        }catch (Exception e){
-            e.printStackTrace();
         }
 
         return result;
